@@ -98,6 +98,14 @@ bpy.types.Scene.importfile = bpy.props.StringProperty(
     subtype='FILE_PATH'
 )
 
+# Boolean property for skipping the first data column
+bpy.types.Scene.skipFirstColumn = bpy.props.BoolProperty(
+    name="Skip first data column",
+    description="Skip the first data column during CSV import (e.g., if they include the frame number)",
+    default=False
+)
+
+
 # Define a boolean property for the checkboxes
 bpy.types.Scene.isTranslationImp = bpy.props.BoolProperty(
     name="import Translations",
@@ -119,16 +127,16 @@ bpy.types.Scene.new_or_selected = bpy.props.EnumProperty (
     default='NEW'
 )
 
-# Define an operator for creating an xCam
+# Define an operator for importing Rigid body transformations
 class ImportOperator(bpy.types.Operator):
     bl_idname = "scene.importfile"
-    bl_label = "Import Rigid Body Data to selected object"
-    bl_description = "Import data"
+    bl_description = "Import Rigid Body Data to selected object"
+    bl_label = "Import data"
 
     def execute(self, context):
         ###########################################################
         from . import xrommimport
-        xrommimport.importRBT(context.scene.importfile)
+        xrommimport.importRBT(context.scene.importfile, context.scene.skipFirstColumn) #pass the CSV file path, and the boolean that decides whether the first column is skipped
         ###########################################################
         self.report({'INFO'}, "importing csv")
         return {'FINISHED'}
@@ -161,6 +169,7 @@ class ImportPanel(bpy.types.Panel):
         scene = context.scene
 
         layout.prop(scene, "importfile", text="CSV")
+        layout.prop(scene, "skipFirstColumn")
         layout.separator()
         layout.label(text="Import Rigid Body transformations:")
         layout.operator("scene.importfile")

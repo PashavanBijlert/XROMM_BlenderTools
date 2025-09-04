@@ -11,14 +11,13 @@ import csv
 import numpy as np
 from mathutils import Matrix, Vector
 
-#file name: hardcoded for now
-#importCSV = "C:\\Users\\pfalk\\OneDrive\\WORK\\CurrentWork\\MyBlenderStuff\\XROMM ToolKit for Blender\\Sample Data\\RigidBody001_Upper_transformation.csv"
 
 
-
-def importRBT(importCSV):
+def importRBT(importCSV, skipFirstColumn):
     #hardcode datatype for now
-
+    ### Inputs:
+    # importCSV (absolute path to the target csv file, string)
+    # skipFirstColumn (boolean, whether or not to skip the first column of the CSV when importing)
     #############################
     #Rigid Body Transformation
     #############################
@@ -30,10 +29,16 @@ def importRBT(importCSV):
     with open(importCSV, newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         next(reader)
+
+        
         # Loop through each row in the CSV file
         for row in reader:
-            # Extract the 16 elements of the matrix from the row
-            matrix_elements = [float(x) for x in row[:16]]
+            
+            if skipFirstColumn: # If we skip the first column, extract element 1-16
+                matrix_elements = [float(x) for x in row[1:17]]
+            else: #else, we extract element 0-15 as normal. 
+                matrix_elements = [float(x) for x in row[:16]]
+            
             print("Me: ", matrix_elements)
             # Create a 4x4 matrix from the elements
             matrix = Matrix((
