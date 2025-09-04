@@ -132,6 +132,7 @@ class ImportOperator(bpy.types.Operator):
     bl_idname = "scene.importfile"
     bl_description = "Import Rigid Body Data to selected object"
     bl_label = "Import data"
+    bl_options = {"UNDO"} #enable undoing
 
     def execute(self, context):
         ###########################################################
@@ -146,7 +147,8 @@ class ImportTransRotOperator(bpy.types.Operator):
     bl_idname = "scene.importtrfile"
     bl_label = "Import translation/rotation data"
     bl_description = "Import translation and/or rotation data to selected object or new sphere(s)"
-
+    bl_options = {"UNDO"} #enable undoing
+    
     def execute(self, context):
         ###########################################################
         from . import transrotimport
