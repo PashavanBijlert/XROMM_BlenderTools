@@ -57,6 +57,9 @@ def importRBT(importCSV, skipFirstColumn):
     # Set the current frame to 1
     bpy.context.scene.frame_set(1)
 
+    # Set the playback in the scene to end with the final frame of the imported data
+
+    bpy.data.scenes[0].frame_end = len(transformations)
 
 
     # Loop through each transformation and create a keyframe for each frame
